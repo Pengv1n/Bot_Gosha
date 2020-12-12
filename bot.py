@@ -1,7 +1,6 @@
 import pyowm #API позволяющее получить погоду
 import telebot
 import random
-from flask import Flask
 from telebot import types #для добавления кнопок
 from bs4 import BeautifulSoup #позволяет легко парсить сайты
 import requests as req #позволяет получить код HTML по ссылке сайта
