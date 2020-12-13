@@ -74,7 +74,7 @@ def start(message):
     if message.from_user.id in city:
         markup = types.ReplyKeyboardMarkup(one_time_keyboard=True)
         for i in city[message.from_user.id]:
-            markup.add(i)
+            markup.add(i) #добавление кнопок городов
         bot.send_message(message.from_user.id, 'Эта команда позволяет удалить город из быстрого получения погоды'
                                                '\nВыберите город, который хотите удалить',reply_markup=markup)
         bot.register_next_step_handler(message, del_town)
@@ -85,7 +85,7 @@ city={}
 
 def del_town(message):
     id=message.from_user.id
-    if len(city[id])==1:
+    if len(city[id])==1: #если город в словаре один, удаляем id вместе с городом
         del city[id]
     else:
         city[id]=[v for v in city[id] if v!=message.text]
@@ -94,7 +94,7 @@ def del_town(message):
 def get_town(message):
     id=message.from_user.id
     try:
-        wo = owm.weather_at_place(message.text).get_weather()
+        wo = owm.weather_at_place(message.text).get_weather() #проверка,может ли пользователь получить погоду этого города или нет
         if id in city:
             city[id].append(message.text)
         else:
@@ -123,7 +123,7 @@ def get_city(message): # приглашает ввести желаемый го
         if message.from_user.id in city:
             print(city[message.from_user.id])
             for i in city[message.from_user.id]:
-                markup.add(i)
+                markup.add(i)   #если у пользователя есть добавленные города, выводим кнопки
         bot.send_message(message.from_user.id, "Введи город, для которого хочешь узнать погоду",reply_markup=markup)
         bot.register_next_step_handler(message, get_temperature)
 
