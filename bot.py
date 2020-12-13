@@ -47,11 +47,17 @@ def parsing_stixs():
             continue
 parsing_stixs()
 
-owm =pyowm.OWM('b3377cb02dafa025857e3fdc8b022828') #токен, необходимый для получения погоды
+owm =pyowm.OWM('b3377cb02dafa025857e3fdc8b022828',language = "RU") #токен, необходимый для получения погоды
 
 token='1313378892:AAHD3klFSAvNdC9508OWTY6aZzCRq74zNQw' #токен бота
 bot = telebot.TeleBot(token)
 
+@bot.edited_message_handler(content_types=['document', 'audio','sticker']) # при изменении сообщения тоже работает
+@bot.message_handler(content_types=['document', 'audio','sticker']) #отправляет стикер на любое не текстовое сообщение
+def dont_undestand(message):
+    bot.send_sticker(message.from_user.id,'CAACAgIAAxkBAAKAo1_WQodfsE2f3338Cs9bz1nzIXyhAALaVQAC6VUFGBY8Fc3I7WW0HgQ') #ID стикера
+
+@bot.edited_message_handler(commands=['start','help']) # при изменении сообщения тоже работает
 @bot.message_handler(commands=['start','help']) #быстрые команды, будут выполняться при вводе /start или /help
 def start(message):
     bot.send_message(message.from_user.id, 'Привет!\nВот что ты можешь получить от меня:'
@@ -64,11 +70,13 @@ def start(message):
                                            '\n---Напиши /start или /help'
                                            '\nВведи что-нибудь')
 
+@bot.edited_message_handler(commands=['city']) # при изменении сообщения тоже работает
 @bot.message_handler(commands=['city']) #будет выполняться при вводе /city
 def start(message):
     bot.send_message(message.from_user.id, 'Эта команда позволяет добавить город для дальнейшего быстрого получения погоды в нем\nВведи желаемый город')
     bot.register_next_step_handler(message, get_town)
 
+@bot.edited_message_handler(commands=['delcity']) # при изменении сообщения тоже работает
 @bot.message_handler(commands=['delcity']) #будет выполняться при вводе /delcity
 def start(message):
     if message.from_user.id in city:
@@ -103,6 +111,7 @@ def get_town(message):
     except:
         bot.reply_to(message,'Такого города не существует')
 
+@bot.edited_message_handler(content_types=['text']) # при изменении сообщения тоже работает
 @bot.message_handler(content_types=['text']) #функция выполняющаяся при каждом вводе текстового сообщения
 def content(message):
     markup = types.ReplyKeyboardMarkup(one_time_keyboard=True)
@@ -136,7 +145,8 @@ def get_temperature(message): #выводит температуру
         temp_min=temp['temp_min']
         temp_max=temp['temp_max']
         bot.send_message(message.from_user.id,"В городе " +str(city1)+ " сейчас " + str(temp_now) +
-                         "°С\nМин: "+str(temp_min)+'°С     '+'Макс: '+str(temp_max)+'°С')
+                         "°С\n\nМин: "+str(temp_min)+'°С     '+'Макс: '+str(temp_max)+'°С'+
+                         '\n\n'+str(wo.get_detailed_status()).title())
     except:
         bot.send_message(message.from_user.id,"Такого города не существует")
 
