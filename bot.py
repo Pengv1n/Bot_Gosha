@@ -49,7 +49,7 @@ parsing_stixs()
 
 owm =pyowm.OWM('b3377cb02dafa025857e3fdc8b022828',language = "RU") #токен, необходимый для получения погоды
 
-token='1313378892:AAHD3klFSAvNdC9508OWTY6aZzCRq74zNQw' #токен бота
+token='token' #токен бота
 bot = telebot.TeleBot(token)
 
 @bot.edited_message_handler(content_types=['document', 'audio','sticker']) # при изменении сообщения тоже работает
